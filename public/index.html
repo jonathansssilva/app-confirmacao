@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirmar Presença</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600&display=swap');
+
+  :root{
+    --bg-deep: #4A1E33;
+    --bg-deep-2: #6B2A44;
+    --paper: #FDF3F2;
+    --paper-shadow: #F1DADC;
+    --ink: #3A1F27;
+    --ink-soft: #7A5560;
+    --gold: #E0708A;
+    --gold-soft: #EFA0B3;
+    --wine: #C85C7C;
+    --wine-dark: #A83F63;
+    --sage: #C98CA0;
+    --ok-bg: #B4557A;
+    --no-bg: #A83F63;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin:0; padding:0;
+    min-height:100%;
+    background:
+      radial-gradient(1100px 700px at 20% -10%, rgba(199,154,58,0.10), transparent 60%),
+      radial-gradient(900px 600px at 100% 100%, rgba(199,154,58,0.07), transparent 55%),
+      linear-gradient(180deg, var(--bg-deep), var(--bg-deep-2));
+    color: var(--ink);
+    font-family: 'Work Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .stage{
+    min-height: 100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 40px 18px;
+  }
+
+  .invite{
+    position:relative;
+    width: 100%;
+    max-width: 440px;
+    background: var(--paper);
+    border-radius: 3px;
+    box-shadow:
+      0 1px 0 var(--paper-shadow),
+      0 30px 60px -20px rgba(0,0,0,0.55),
+      0 0 0 1px rgba(199,154,58,0.15);
+    padding: 46px 34px 36px;
+    overflow: hidden;
+  }
+
+  .invite::before{
+    content:"";
+    position:absolute;
+    inset: 10px;
+    border: 1px solid rgba(199,154,58,0.45);
+    pointer-events:none;
+  }
+
+  .brandmark{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin-bottom: 22px;
+  }
+  .brandmark img{
+    height: 20px;
+    opacity: 0.55;
+    filter: grayscale(1);
+  }
+
+  .category{
+    text-align:center;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--sage);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .event-name{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 42px;
+    line-height: 1.02;
+    text-align:center;
+    color: var(--ink);
+    margin: 0 0 18px;
+    word-break: break-word;
+  }
+
+  .ticket{
+    position:relative;
+    margin: 0 auto 26px;
+    max-width: 300px;
+    background: var(--wine);
+    color: var(--paper);
+    border-radius: 2px;
+    padding: 10px 18px;
+    text-align:center;
+    font-size: 14.5px;
+    letter-spacing: 0.01em;
+  }
+  .ticket::before, .ticket::after{
+    content:"";
+    position:absolute;
+    top:50%;
+    width: 16px; height:16px;
+    background: var(--paper);
+    border-radius: 50%;
+    transform: translateY(-50%);
+  }
+  .ticket::before{ left: -8px; }
+  .ticket::after{ right: -8px; }
+  .ticket strong{ font-family:'Fraunces', serif; font-weight:600; font-size: 16px; }
+
+  .details{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin: 0 auto 28px;
+    max-width: 340px;
+  }
+  .detail-block .label{
+    font-size: 11.5px;
+    color: var(--sage);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .detail-block .value{
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .detail-block .value small{
+    display:block;
+    color: var(--ink-soft);
+    font-size: 13px;
+  }
+
+  hr.sep{
+    border:none;
+    border-top: 1px dashed rgba(85,88,76,0.35);
+    margin: 26px 0;
+  }
+
+  .field-label{
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    text-align:center;
+  }
+
+  input[type=text]{
+    width:100%;
+    font-family:'Work Sans', sans-serif;
+    font-size: 16px;
+    padding: 13px 14px;
+    border-radius: 2px;
+    border: 1px solid rgba(85,88,76,0.35);
+    background: #fff;
+    color: var(--ink);
+    outline:none;
+    transition: border-color .15s ease;
+  }
+  input[type=text]:focus{ border-color: var(--gold); }
+  input[type=text]:focus-visible, button:focus-visible{
+    outline: 2px solid var(--gold-soft);
+    outline-offset: 2px;
+  }
+
+  .btn{
+    display:block;
+    width:100%;
+    text-align:center;
+    font-family:'Work Sans', sans-serif;
+    font-weight:600;
+    font-size: 15.5px;
+    padding: 14px 16px;
+    border-radius: 2px;
+    border: none;
+    cursor:pointer;
+    margin-top: 12px;
+    transition: transform .12s ease, opacity .12s ease;
+  }
+  .btn:active{ transform: scale(0.985); }
+  .btn-primary{ background: var(--ink); color: var(--paper); }
+  .btn-primary:hover{ opacity:0.9; }
+  .btn-yes{ background: var(--ok-bg); color: var(--paper); }
+  .btn-yes:hover{ opacity:0.9; }
+  .btn-no{ background: transparent; color: var(--wine-dark); border: 1px solid var(--wine-dark); }
+  .btn-no:hover{ background: rgba(166,72,90,0.06); }
+  .btn-ghost{
+    display:block; width:100%; text-align:center;
+    background:none; border:none; cursor:pointer;
+    font-family:'Work Sans', sans-serif; font-size: 14px;
+    color: var(--ink-soft); text-decoration: underline;
+    padding: 10px; margin-top: 14px;
+  }
+  .btn[disabled]{ opacity: 0.5; cursor:not-allowed; }
+
+  .match-list{ margin-top: 14px; display:flex; flex-direction:column; gap:8px; }
+  .match-item{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 12px 14px;
+    border: 1px solid rgba(85,88,76,0.25);
+    border-radius: 2px;
+    background: #fff;
+    cursor:pointer;
+    font-size: 15px;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .match-item:hover{ border-color: var(--gold); background: #FFFCF5; }
+  .match-item .status-tag{
+    font-size: 11.5px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-weight:600;
+  }
+  .status-yes{ background: rgba(76,107,79,0.15); color: var(--ok-bg); }
+  .status-no{ background: rgba(166,72,90,0.15); color: var(--wine-dark); }
+  .status-pending{ background: rgba(85,88,76,0.12); color: var(--ink-soft); }
+
+  .empty-note{
+    text-align:center;
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin-top: 14px;
+    line-height:1.5;
+  }
+
+  .greeting{
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-size: 26px;
+    text-align:center;
+    margin: 0 0 6px;
+  }
+  .greeting-sub{
+    text-align:center;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    margin-bottom: 22px;
+  }
+
+  .seal{
+    width: 74px; height:74px;
+    border-radius:50%;
+    margin: 0 auto 18px;
+    background: radial-gradient(circle at 32% 28%, var(--gold-soft), var(--gold) 60%, #a87c26 100%);
+    display:flex; align-items:center; justify-content:center;
+    color: var(--paper);
+    font-family:'Fraunces', serif;
+    font-size: 30px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25) inset, 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  .thankyou-title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size: 30px;
+    text-align:center;
+    margin: 0 0 8px;
+  }
+  .thankyou-sub{
+    text-align:center;
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin-bottom: 26px;
+    line-height:1.5;
+  }
+
+  .footer-note{
+    text-align:center;
+    color: var(--ink-soft);
+    font-size: 12px;
+    margin-top: 24px;
+  }
+  .footer-note a{ color: var(--ink-soft); }
+
+  .admin-link-wrap{ text-align:center; margin-top: 8px; }
+  .admin-link{
+    background:none; border:none; cursor:pointer;
+    font-size: 11.5px; color: rgba(85,88,76,0.55);
+    text-decoration: underline;
+  }
+
+  .admin-header{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom: 20px;
+  }
+  .admin-title{
+    font-family:'Fraunces', serif; font-weight:600; font-size: 24px;
+  }
+  .admin-back{
+    background:none; border:none; cursor:pointer;
+    font-size: 13px; color: var(--ink-soft); text-decoration: underline;
+  }
+
+  .stats-row{
+    display:grid; grid-template-columns: repeat(3,1fr); gap:10px;
+    margin-bottom: 22px;
+  }
+  .stat{
+    background:#fff; border:1px solid rgba(85,88,76,0.18);
+    border-radius: 2px; padding: 12px 8px; text-align:center;
+  }
+  .stat .num{ font-family:'Fraunces', serif; font-size: 24px; font-weight:600; }
+  .stat .lab{ font-size: 11px; color: var(--ink-soft); margin-top:2px; }
+
+  .section-title{
+    font-size: 13px; font-weight:600; color: var(--sage);
+    margin: 22px 0 10px;
+  }
+
+  .form-grid{ display:flex; flex-direction:column; gap:12px; }
+  .form-row label{
+    display:block; font-size: 12.5px; color: var(--ink-soft); margin-bottom:5px;
+  }
+
+  .guest-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 10px 12px; border:1px solid rgba(85,88,76,0.18);
+    border-radius: 2px; background:#fff; margin-bottom: 8px;
+    gap: 10px;
+  }
+  .guest-row .gname{ font-size: 14.5px; flex:1; }
+  .guest-row .remove{
+    background:none; border:none; cursor:pointer;
+    color: var(--wine-dark); font-size: 12.5px; text-decoration:underline;
+    flex-shrink:0;
+  }
+
+  .add-guest-row{ display:flex; gap:8px; margin-top: 4px; }
+  .add-guest-row input{ flex:1; }
+  .add-guest-row button{ margin-top:0; width:auto; padding: 0 16px; }
+
+  .loading{ text-align:center; color: var(--ink-soft); font-size:14px; padding: 30px 0; }
+  .msg{
+    text-align:center; font-size: 13px; padding: 8px 10px;
+    border-radius: 2px; margin-top: 10px;
+  }
+  .msg-ok{ background: rgba(76,107,79,0.12); color: var(--ok-bg); }
+  .msg-err{ background: rgba(166,72,90,0.12); color: var(--wine-dark); }
+
+  @media (max-width: 380px){
+    .event-name{ font-size: 34px; }
+    .invite{ padding: 36px 22px 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="invite" id="app"><div class="loading">Abrindo o convite…</div></div></div>
+
+<!-- ============================================================
+     CONFIGURAÇÃO DO BANCO DE DADOS (Firebase)
+     Troque os valores abaixo pelos do SEU projeto Firebase.
+     Veja o passo a passo que te enviei junto com este arquivo.
+     ============================================================ -->
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "COLE_AQUI_SUA_API_KEY",
+    authDomain: "COLE_AQUI.firebaseapp.com",
+    projectId: "COLE_AQUI_SEU_PROJECT_ID",
+    storageBucket: "COLE_AQUI.appspot.com",
+    messagingSenderId: "COLE_AQUI",
+    appId: "COLE_AQUI"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const docRef = db.collection('eiconfirme').doc('evento-principal');
+</script>
+
+<script>
+(function(){
+  const DEFAULT_DATA = {
+    event: {
+      category: 'Aniversário',
+      name: "Nome do Aniversariante",
+      date: '', // yyyy-mm-dd
+      time: '20:00',
+      venue: 'Nome do local',
+      address: 'Endereço do evento',
+      adminPin: '1234'
+    },
+    guests: [
+      { id: 'g1', name: 'Convidado Exemplo', status: 'pending', respondedAt: null }
+    ]
+  };
+
+  let state = {
+    data: null,
+    screen: 'search', // search | confirm | thanks | admin-login | admin
+    query: '',
+    matches: [],
+    selectedGuestId: null,
+    adminMsg: '',
+    thanksStatus: null
+  };
+
+  const app = document.getElementById('app');
+
+  function normalize(s){
+    return (s || '').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+  }
+
+  async function loadData(){
+    try{
+      const snap = await docRef.get();
+      if(snap.exists){
+        state.data = snap.data();
+      } else {
+        state.data = DEFAULT_DATA;
+        await saveData();
+      }
+    }catch(e){
+      console.error('Erro ao carregar dados do Firebase:', e);
+      state.data = DEFAULT_DATA;
+    }
+    render();
+    // Mantém a tela atualizada em tempo real quando alguém confirma presença
+    // em outro celular, sem precisar recarregar a página.
+    docRef.onSnapshot((snap) => {
+      if(snap.exists && state.screen === 'search'){
+        state.data = snap.data();
+        render();
+      }
+    });
+  }
+
+  async function saveData(){
+    try{
+      await docRef.set(state.data);
+      return true;
+    }catch(e){
+      console.error('Erro ao salvar dados no Firebase:', e);
+      return false;
+    }
+  }
+
+  function daysUntil(dateStr, timeStr){
+    if(!dateStr) return null;
+    const target = new Date(dateStr + 'T' + (timeStr || '00:00') + ':00');
+    const now = new Date();
+    const diffMs = target - now;
+    const diffDays = Math.ceil(diffMs / (1000*60*60*24));
+    return diffDays;
+  }
+
+  function formatDatePt(dateStr){
+    if(!dateStr) return 'A definir';
+    const [y,m,d] = dateStr.split('-');
+    if(!y||!m||!d) return dateStr;
+    return `${d}/${m}/${y}`;
+  }
+
+  function countdownLabel(){
+    const days = daysUntil(state.data.event.date, state.data.event.time);
+    if(days === null) return 'Data a confirmar';
+    if(days > 1) return `Faltam ${days} dias`;
+    if(days === 1) return 'Falta 1 dia';
+    if(days === 0) return 'É hoje!';
+    return 'Este evento já aconteceu';
+  }
+
+  function escapeHtml(s){
+    return (s||'').toString()
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
+
+  function headerHtml(){
+    const ev = state.data.event;
+    return `
+      <div class="brandmark">✦</div>
+      <div class="category">${escapeHtml(ev.category)}</div>
+      <h1 class="event-name">${escapeHtml(ev.name)}</h1>
+      <div class="ticket"><strong>${countdownLabel()}</strong></div>
+      <div class="details">
+        <div class="detail-block">
+          <div class="label">Quando</div>
+          <div class="value">${formatDatePt(ev.date)}<small>às ${escapeHtml(ev.time || '--:--')}</small></div>
+        </div>
+        <div class="detail-block">
+          <div class="label">Onde</div>
+          <div class="value">${escapeHtml(ev.venue || 'A definir')}<small>${escapeHtml(ev.address || '')}</small></div>
+        </div>
+      </div>
+      <hr class="sep">
+    `;
+  }
+
+  function renderSearch(){
+    const q = state.query;
+    const matches = q.trim().length > 0
+      ? state.data.guests.filter(g => normalize(g.name).includes(normalize(q)))
+      : [];
+
+    app.innerHTML = `
+      ${headerHtml()}
+      <div class="field-label">Digite seu nome para verificar se está na lista</div>
+      <input type="text" id="search-input" placeholder="Seu nome" value="${escapeHtml(q)}" autocomplete="off">
+      ${matches.length ? `
+        <div class="match-list">
+          ${matches.map(g => `
+            <div class="match-item" data-id="${g.id}">
+              <span>${escapeHtml(g.name)}</span>
+              <span class="status-tag ${g.status === 'yes' ? 'status-yes' : g.status === 'no' ? 'status-no' : 'status-pending'}">
+                ${g.status === 'yes' ? 'Confirmado' : g.status === 'no' ? 'Não vai' : 'A confirmar'}
+              </span>
+            </div>
+          `).join('')}
+        </div>
+      ` : (q.trim().length > 0 ? `<div class="empty-note">Nenhum nome encontrado. Confira a grafia ou fale com quem te convidou.</div>` : '')}
+      <div class="admin-link-wrap">
+        <button class="admin-link" id="admin-link">Área do organizador</button>
+      </div>
+    `;
+
+    const input = document.getElementById('search-input');
+    input.addEventListener('input', (e) => {
+      state.query = e.target.value;
+      render();
+      const el = document.getElementById('search-input');
+      if(el){ el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
+    });
+
+    document.querySelectorAll('.match-item').forEach(item => {
+      item.addEventListener('click', () => {
+        state.selectedGuestId = item.getAttribute('data-id');
+        state.screen = 'confirm';
+        render();
+      });
+    });
+
+    document.getElementById('admin-link').addEventListener('click', () => {
+      state.screen = 'admin-login';
+      state.adminMsg = '';
+      render();
+    });
+  }
+
+  function renderConfirm(){
+    const guest = state.data.guests.find(g => g.id === state.selectedGuestId);
+    if(!guest){ state.screen = 'search'; render(); return; }
+
+    app.innerHTML = `
+      ${headerHtml()}
+      <div class="greeting">Olá, ${escapeHtml(guest.name)}</div>
+      <div class="greeting-sub">Por favor, confirme se você poderá comparecer.</div>
+      <button class="btn btn-yes" id="btn-yes">Sim, eu vou!</button>
+      <button class="btn btn-no" id="btn-no">Não posso ir</button>
+      <button class="btn-ghost" id="btn-back">← Voltar e buscar outro nome</button>
+    `;
+
+    document.getElementById('btn-yes').addEventListener('click', () => respond(guest.id, 'yes'));
+    document.getElementById('btn-no').addEventListener('click', () => respond(guest.id, 'no'));
+    document.getElementById('btn-back').addEventListener('click', () => {
+      state.screen = 'search';
+      state.selectedGuestId = null;
+      render();
+    });
+  }
+
+  async function respond(guestId, status){
+    const guest = state.data.guests.find(g => g.id === guestId);
+    if(!guest) return;
+    guest.status = status;
+    guest.respondedAt = new Date().toISOString();
+    await saveData();
+    state.thanksStatus = status;
+    state.screen = 'thanks';
+    render();
+  }
+
+  function renderThanks(){
+    const yes = state.thanksStatus === 'yes';
+    app.innerHTML = `
+      <div class="seal">${yes ? '✓' : '✕'}</div>
+      <div class="thankyou-title">${yes ? 'Presença confirmada!' : 'Resposta registrada'}</div>
+      <div class="thankyou-sub">${yes
+        ? 'Anote na agenda — vai ser uma festa e mal podemos esperar para te ver lá.'
+        : 'Sentiremos sua falta, mas obrigado por avisar com antecedência.'}</div>
+      <button class="btn btn-primary" id="btn-done">Voltar ao início</button>
+    `;
+    document.getElementById('btn-done').addEventListener('click', () => {
+      state.screen = 'search';
+      state.query = '';
+      state.selectedGuestId = null;
+      render();
+    });
+  }
+
+  function renderAdminLogin(){
+    app.innerHTML = `
+      <div class="admin-header">
+        <div class="admin-title">Área do organizador</div>
+        <button class="admin-back" id="back-search">Voltar</button>
+      </div>
+      <div class="field-label">Digite o código de acesso</div>
+      <input type="text" id="pin-input" placeholder="Código" autocomplete="off">
+      <button class="btn btn-primary" id="pin-submit">Entrar</button>
+      ${state.adminMsg ? `<div class="msg msg-err">${escapeHtml(state.adminMsg)}</div>` : ''}
+      <div class="footer-note">Código padrão: 1234 (altere em "Configurações" após entrar)</div>
+    `;
+    document.getElementById('back-search').addEventListener('click', () => {
+      state.screen = 'search'; render();
+    });
+    document.getElementById('pin-submit').addEventListener('click', tryLogin);
+    document.getElementById('pin-input').addEventListener('keydown', (e) => {
+      if(e.key === 'Enter') tryLogin();
+    });
+  }
+
+  function tryLogin(){
+    const val = document.getElementById('pin-input').value.trim();
+    if(val === (state.data.event.adminPin || '1234')){
+      state.screen = 'admin';
+      state.adminMsg = '';
+      render();
+    } else {
+      state.adminMsg = 'Código incorreto. Tente novamente.';
+      render();
+    }
+  }
+
+  function renderAdmin(){
+    const ev = state.data.event;
+    const guests = state.data.guests;
+    const yes = guests.filter(g => g.status === 'yes').length;
+    const no = guests.filter(g => g.status === 'no').length;
+    const pending = guests.filter(g => g.status === 'pending').length;
+
+    app.innerHTML = `
+      <div class="admin-header">
+        <div class="admin-title">Organizador</div>
+        <button class="admin-back" id="back-search">Ver como convidado</button>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat"><div class="num">${yes}</div><div class="lab">Confirmados</div></div>
+        <div class="stat"><div class="num">${no}</div><div class="lab">Não vão</div></div>
+        <div class="stat"><div class="num">${pending}</div><div class="lab">Aguardando</div></div>
+      </div>
+
+      <div class="section-title">Detalhes do evento</div>
+      <div class="form-grid">
+        <div class="form-row"><label>Categoria</label><input type="text" id="f-category" value="${escapeHtml(ev.category)}"></div>
+        <div class="form-row"><label>Nome do aniversariante / evento</label><input type="text" id="f-name" value="${escapeHtml(ev.name)}"></div>
+        <div class="form-row"><label>Data</label><input type="text" id="f-date" placeholder="AAAA-MM-DD" value="${escapeHtml(ev.date)}"></div>
+        <div class="form-row"><label>Horário</label><input type="text" id="f-time" placeholder="HH:MM" value="${escapeHtml(ev.time)}"></div>
+        <div class="form-row"><label>Local</label><input type="text" id="f-venue" value="${escapeHtml(ev.venue)}"></div>
+        <div class="form-row"><label>Endereço</label><input type="text" id="f-address" value="${escapeHtml(ev.address)}"></div>
+        <button class="btn btn-primary" id="save-event">Salvar detalhes</button>
+      </div>
+
+      <div class="section-title">Lista de convidados (${guests.length})</div>
+      <div id="guest-list">
+        ${guests.map(g => `
+          <div class="guest-row">
+            <span class="gname">${escapeHtml(g.name)}</span>
+            <span class="status-tag ${g.status === 'yes' ? 'status-yes' : g.status === 'no' ? 'status-no' : 'status-pending'}">
+              ${g.status === 'yes' ? 'Vai' : g.status === 'no' ? 'Não vai' : 'Aguardando'}
+            </span>
+            <button class="remove" data-id="${g.id}">remover</button>
+          </div>
+        `).join('') || '<div class="empty-note">Nenhum convidado ainda.</div>'}
+      </div>
+      <div class="add-guest-row">
+        <input type="text" id="new-guest" placeholder="Adicionar nome à lista">
+        <button class="btn btn-primary" id="add-guest">Adicionar</button>
+      </div>
+
+      <div class="section-title">Configurações</div>
+      <div class="form-grid">
+        <div class="form-row"><label>Código de acesso do organizador</label><input type="text" id="f-pin" value="${escapeHtml(ev.adminPin)}"></div>
+        <button class="btn btn-primary" id="save-pin">Salvar código</button>
+      </div>
+
+      <div id="admin-msg"></div>
+    `;
+
+    document.getElementById('back-search').addEventListener('click', () => {
+      state.screen = 'search'; render();
+    });
+
+    document.getElementById('save-event').addEventListener('click', async () => {
+      ev.category = document.getElementById('f-category').value.trim() || 'Aniversário';
+      ev.name = document.getElementById('f-name').value.trim() || 'Nome do Aniversariante';
+      ev.date = document.getElementById('f-date').value.trim();
+      ev.time = document.getElementById('f-time').value.trim();
+      ev.venue = document.getElementById('f-venue').value.trim();
+      ev.address = document.getElementById('f-address').value.trim();
+      const ok = await saveData();
+      showAdminMsg(ok ? 'Detalhes salvos.' : 'Não foi possível salvar. Tente novamente.', ok);
+    });
+
+    document.getElementById('add-guest').addEventListener('click', addGuest);
+    document.getElementById('new-guest').addEventListener('keydown', (e) => {
+      if(e.key === 'Enter') addGuest();
+    });
+
+    document.querySelectorAll('.remove').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.getAttribute('data-id');
+        state.data.guests = state.data.guests.filter(g => g.id !== id);
+        const ok = await saveData();
+        showAdminMsg(ok ? 'Convidado removido.' : 'Erro ao remover.', ok);
+        render();
+      });
+    });
+
+    document.getElementById('save-pin').addEventListener('click', async () => {
+      const val = document.getElementById('f-pin').value.trim();
+      ev.adminPin = val || '1234';
+      const ok = await saveData();
+      showAdminMsg(ok ? 'Código atualizado.' : 'Erro ao salvar código.', ok);
+    });
+  }
+
+  async function addGuest(){
+    const input = document.getElementById('new-guest');
+    const name = input.value.trim();
+    if(!name) return;
+    const id = 'g' + Date.now() + Math.floor(Math.random()*1000);
+    state.data.guests.push({ id, name, status: 'pending', respondedAt: null });
+    const ok = await saveData();
+    showAdminMsg(ok ? `"${name}" adicionado à lista.` : 'Erro ao adicionar.', ok);
+    render();
+  }
+
+  function showAdminMsg(text, ok){
+    state.adminFlash = { text, ok };
+    setTimeout(() => {
+      const el = document.getElementById('admin-msg');
+      if(el) el.innerHTML = '';
+    }, 3000);
+    setTimeout(() => {
+      const el = document.getElementById('admin-msg');
+      if(el) el.innerHTML = `<div class="msg ${ok ? 'msg-ok' : 'msg-err'}">${escapeHtml(text)}</div>`;
+    }, 0);
+  }
+
+  function render(){
+    if(!state.data){ app.innerHTML = '<div class="loading">Abrindo o convite…</div>'; return; }
+    if(state.screen === 'search') renderSearch();
+    else if(state.screen === 'confirm') renderConfirm();
+    else if(state.screen === 'thanks') renderThanks();
+    else if(state.screen === 'admin-login') renderAdminLogin();
+    else if(state.screen === 'admin') renderAdmin();
+  }
+
+  loadData();
+})();
+</script>
+</body>
+</html>
